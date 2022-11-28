@@ -40,7 +40,7 @@ func getTasks(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(tasks)
 }
 
-//Function create Task
+// Function create Task
 func createTask(w http.ResponseWriter, r *http.Request) {
 	var newTask task
 	reqBody, err := ioutil.ReadAll(r.Body)
@@ -55,7 +55,7 @@ func createTask(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(newTask)
 }
 
-//Function for get a data for id
+// Function for get a data for id
 func getTask_ID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	taskID, err := strconv.Atoi(vars["id"])
@@ -92,7 +92,10 @@ func indexRoute(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	Routes()
+}
 
+func Routes() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", indexRoute)
 	router.HandleFunc("/tasks", getTasks).Methods("GET")
@@ -100,4 +103,6 @@ func main() {
 	router.HandleFunc("/tasks/{id}", getTask_ID).Methods("GET")
 	router.HandleFunc("/tasks/{id}", deleteTask).Methods("DELETE")
 	log.Fatal(http.ListenAndServe(":4000", router))
+
+	return router
 }
